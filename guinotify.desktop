@@ -1,0 +1,15 @@
+[Desktop Entry]
+Version=1.0
+Name=guinotify
+GenericName=A tiny frontend for inotify.
+Type=Application
+Comment=A tiny frontend for inotify
+Comment[ru]=Крошечный интерфейс для inotify, написанный на Python
+Comment[fr]=Une petite interface pour inotify, écrite en Python
+Comment[de]=Ein winziges frontend für inotify, geschrieben in Python
+Icon=guinotify
+Exec=/usr/bin/guinotify
+Terminal=false
+StartupNotify=false
+StartupWMClass=GameInfo
+Categories=System;Monitor;
