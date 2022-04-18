@@ -8,6 +8,24 @@ import wx
 # end wxGlade
 
 # begin wxGlade: extracode
+
+listEvents = {
+	"access" :      ["file or directory contents were read", "Eine Datei wurde gelesen"],
+	"modify" :      ["file or directory contents were written", "Eine Datei wurde geändert"],
+	"attrib" :      ["file or directory attributes changed", "Die Metadaten einer Datei wurden geändert (Zeitstempel, Rechte, erweiterte Attribute)"],
+	"close_write" : ["file or directory closed, after being opened in writable mode", "Eine Datei wurde geschlossen nachdem sie zum schreiben geöffnet wurde, sie muss aber nicht verändert worden sein"],
+	"close_nowrite" : ["file or directory closed, after being opened in read-only mode", "Eine Datei wurde geschlossen nachdem sie schreibgeschützt geöffnet wurde"],
+	"close" :       ["file or directory closed, regardless of read/write mode", "wie close_write und close_nowrite zusammen"],
+	"open" :        ["file or directory opened", "Eine Datei wurde geöffnet"],
+	"moved_to" :    ["file or directory moved to watched directory", "Eine Datei oder ein Verzeichnis wurde in ein zu überwachendes Verzeichnis verschoben oder im Verzeichnis verschoben"],
+	"moved_from" :  ["file or directory moved from watched directory", "Eine Datei oder ein Verzeichnis wurde aus oder in einem überwachten Verzeichnis verschoben"],
+	"move" :        ["file or directory moved to or from watched directory", "wie moved_to und moved_from zusammen"],
+	"move_self" :   ["a watched file or directory was moved", "Eine überwachte Datei oder ein überwachtes Verzeichnis wurde verschoben. Danach wird die Überwachung abgeschaltet"],
+	"create" :      ["file or directory created within watched directory", "Eine Datei wurde erstellt"],
+	"delete" :      ["file or directory deleted within watched directory", "Eine Datei wurde gelöscht"],
+	"delete_self" : ["file or directory was deleted", "Eine überwachte Datei oder ein überwachtes Verzeichnis wurde gelöscht. Danach wird die Überwachung abgeschaltet"],
+	"unmount" :     ["file system containing file or directory unmounted", "Das Dateisystem, auf dem sich die Überwachung befand, wurde ausgehängt. Danach wird die Überwachung abgeschaltet. Dieses Event kann auch auftreten, wenn es nicht explizit überwacht wurde"]
+}
 # end wxGlade
 
 
@@ -16,7 +34,7 @@ class EventDialog(wx.Dialog):
         # begin wxGlade: EventDialog.__init__
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_DIALOG_STYLE
         wx.Dialog.__init__(self, *args, **kwds)
-        self.SetSize(wx.DLG_UNIT(self, wx.Size(150, 100)))
+        self.SetSize(wx.DLG_UNIT(self, wx.Size(260, 200)))
         self.SetTitle(_("dialog"))
 
         sizer_1 = wx.BoxSizer(wx.VERTICAL)
@@ -26,8 +44,8 @@ class EventDialog(wx.Dialog):
 
         sizer_3 = wx.BoxSizer(wx.VERTICAL)
 
-        self.check_list_box_1 = wx.CheckListBox(self.panel_1, wx.ID_ANY, choices=[_("choice 1")])
-        self.check_list_box_1.SetMinSize(wx.DLG_UNIT(self.check_list_box_1, wx.Size(120, 80)))
+        self.check_list_box_1 = wx.CheckListBox(self.panel_1, wx.ID_ANY) #, choices=[_("choice 1")])
+        self.check_list_box_1.SetMinSize(wx.DLG_UNIT(self.check_list_box_1, wx.Size(250, 160)))
         sizer_3.Add(self.check_list_box_1, 0, wx.ALIGN_CENTER_HORIZONTAL, 0)
 
         sizer_2 = wx.StdDialogButtonSizer()
@@ -50,6 +68,22 @@ class EventDialog(wx.Dialog):
         self.SetEscapeId(self.button_CANCEL.GetId())
 
         self.Layout()
+
+        num = 0
+        entries = []
+        for event, langs in listEvents.items():
+            #print(event)
+            #print(langs)
+            entries.append(str(event) + ' ' + langs[0])
+            #entries.append(langs[0])
+        self.check_list_box_1.InsertItems(items=entries, pos=0)
         # end wxGlade
+
+    def button_OK_click(self, event):  # wxGlade: MainDialog.<event_handler>
+        print("Event handler 'btnOK_click' not implemented!")
+        event.Skip()
+    def button_CANCEL_click(self, event):  # wxGlade: MainDialog.<event_handler>
+        print("Event handler 'btnCANCEL_click' not implemented!")
+        event.Skip()
 
 # end of class EventDialog

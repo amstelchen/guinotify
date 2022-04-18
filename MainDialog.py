@@ -9,20 +9,27 @@ import wx
 
 # begin wxGlade: extracode
 import sys, os, configparser
+import webbrowser
+from EventDialog import EventDialog
 # end wxGlade
 
 
 class MainDialog(wx.Dialog):
     def __init__(self, *args, **kwds):
         # begin wxGlade: MainDialog.__init__
-        print("")
+        #print("")
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_DIALOG_STYLE
         wx.Dialog.__init__(self, *args, **kwds)
         self.SetSize((730, 400))
         self.SetTitle(_("guinotify"))
         _icon = wx.NullIcon
-        _icon.CopyFromBitmap(wx.Bitmap("/home/mic/Projekte/guinotify/128x128.png", wx.BITMAP_TYPE_ANY))
+        _icon.CopyFromBitmap(wx.Bitmap("128x128.png", wx.BITMAP_TYPE_ANY))
+        #/home/mic/Projekte/guinotify/128x128.png
         self.SetIcon(_icon)
+
+        bmp_events = wx.Bitmap("images/events-16x16.png")
+        bmp_options = wx.Bitmap("images/options-16x16.png")
+        bmp_script = wx.Bitmap("images/script-16x16.png")
 
         sizer_1 = wx.BoxSizer(wx.VERTICAL)
 
@@ -61,23 +68,30 @@ class MainDialog(wx.Dialog):
         sizer_2 = wx.StdDialogButtonSizer()
         sizer_1.Add(sizer_2, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALL | wx.SHAPED, 4)
 
-        self.button_OK = wx.Button(self, wx.ID_OK, "")
-        self.button_OK.SetDefault()
-        sizer_2.AddButton(self.button_OK)
+        #self.button_OK = wx.Button(self, wx.ID_OK, "Script")
+        #self.button_OK.SetDefault()
+        #sizer_2.AddButton(self.button_OK)
 
-        self.button_NO = wx.Button(self, wx.ID_NO, "")
-        sizer_2.AddButton(self.button_NO)
+        #self.button_CANCEL = wx.Button(self, wx.ID_HOME, "")
+        #sizer_2.Add(self.button_CANCEL, 0, 0, 0)
 
-        self.button_UNDO = wx.Button(self, wx.ID_UNDO, "")
-        sizer_2.Add(self.button_UNDO, 0, 0, 0)
+        self.button_EV = wx.Button(self, wx.ID_NO, "Events")
+        self.button_EV.SetBitmap(bmp_events)
+        sizer_2.Add(self.button_EV)
 
-        self.button_CANCEL = wx.Button(self, wx.ID_HOME, "")
-        sizer_2.Add(self.button_CANCEL, 0, 0, 0)
+        sizer_2.AddSpacer(10)
 
-        self.button_APPLY = wx.Button(self, wx.ID_APPLY, "")
-        sizer_2.AddButton(self.button_APPLY)
+        self.button_OP = wx.Button(self, wx.ID_APPLY, "Options")
+        self.button_OP.SetBitmap(bmp_options)
+        sizer_2.Add(self.button_OP)
 
-        sizer_2.Add((0, 0), 0, 0, 0)
+        sizer_2.AddSpacer(10)
+
+        self.button_SC = wx.Button(self, wx.ID_UNDO, "Script")
+        self.button_SC.SetBitmap(bmp_script)
+        sizer_2.Add(self.button_SC) #, 0, 0, 0)
+
+        sizer_2.Add((100, 20), 100, 20, 20)
 
         self.button_HELP = wx.Button(self, wx.ID_HELP, "")
         sizer_2.AddButton(self.button_HELP)
@@ -91,8 +105,9 @@ class MainDialog(wx.Dialog):
 
         self.SetSizer(sizer_1)
 
-        self.SetAffirmativeId(self.button_OK.GetId())
-        self.SetEscapeId(self.button_CANCEL.GetId())
+        #self.SetAffirmativeId(self.button_OK.GetId())
+        self.SetEscapeId(self.button_CLOSE.GetId())
+        #self.SetAffirmativeId(self.button_CLOSE.GetId())
 
         self.Layout()
         self.Centre()
@@ -104,11 +119,13 @@ class MainDialog(wx.Dialog):
         self.lsNotifications.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.Item_Active)
         self.lsNotifications.Bind(wx.EVT_LIST_ITEM_FOCUSED, self.Item_Focus)
         self.lsNotifications.Bind(wx.EVT_LIST_ITEM_SELECTED, self.Item_Select)
-        self.button_OK.Bind(wx.EVT_BUTTON, self.btnOK_click)
-        self.button_NO.Bind(wx.EVT_BUTTON, self.btnNO_click)
-        self.button_UNDO.Bind(wx.EVT_BUTTON, self.btnUNDO_click)
-        self.button_CANCEL.Bind(wx.EVT_BUTTON, self.btnCANCEL_click)
-        self.button_APPLY.Bind(wx.EVT_BUTTON, self.btnAPPLY_click)
+
+        #self.button_OK.Bind(wx.EVT_BUTTON, self.btnOK_click)
+        self.button_EV.Bind(wx.EVT_BUTTON, self.btnEVENTS_click)
+        self.button_SC.Bind(wx.EVT_BUTTON, self.btnSCRIPT_click)
+        self.button_OP.Bind(wx.EVT_BUTTON, self.btnOPTIONS_click)
+
+        #self.button_CANCEL.Bind(wx.EVT_BUTTON, self.btnCANCEL_click)
         self.button_HELP.Bind(wx.EVT_BUTTON, self.btnHELP_click)
         self.button_CLOSE.Bind(wx.EVT_BUTTON, self.btnCLOSE_click)
         # end wxGlade
@@ -116,32 +133,39 @@ class MainDialog(wx.Dialog):
     def btnOK_click(self, event):  # wxGlade: MainDialog.<event_handler>
         print("Event handler 'btnOK_click' not implemented!")
         event.Skip()
-    def btnNO_click(self, event):  # wxGlade: MainDialog.<event_handler>
-        print("Event handler 'btnNO_click' not implemented!")
+    def btnEVENTS_click(self, event):  # wxGlade: MainDialog.<event_handler>                FÜR EVENTS
+        print("Event handler 'btnEVENTS_click' not implemented!")
         event.Skip()
-    def btnUNDO_click(self, event):  # wxGlade: MainDialog.<event_handler>
-        print("Event handler 'btnUNDO_click' not implemented!")
+    def btnSCRIPT_click(self, event):  # wxGlade: MainDialog.<event_handler>                FÜR SCRIPT
+        print("Event handler 'btnSCRIPT_click' not implemented!")
         event.Skip()
     def btnCANCEL_click(self, event):  # wxGlade: MainDialog.<event_handler>
         print("Event handler 'btnCANCEL_click' not implemented!")
         event.Skip()
-    def btnAPPLY_click(self, event):  # wxGlade: MainDialog.<event_handler>
-        print("Event handler 'btnAPPLY_click' not implemented!")
+    def btnOPTIONS_click(self, event):  # wxGlade: MainDialog.<event_handler>               FÜR OPTIONS
+        print("Event handler 'btnOPTIONS_click' not implemented!")
         event.Skip()
     def btnHELP_click(self, event):  # wxGlade: MainDialog.<event_handler>
-        print("Event handler 'btnHELP_click' not implemented!")
+        #print("Event handler 'btnHELP_click' not implemented!")
+        url = 'https://github.com/amstelchen/guinotify'
+        webbrowser.open(url)
         event.Skip()
     def btnCLOSE_click(self, event):  # wxGlade: MainDialog.<event_handler>
         print("Event handler 'btnCLOSE_click' not implemented!")
         event.Skip()
     def Item_Select(self, event):  # wxGlade: MainDialog.<event_handler>
-        print("Event handler 'Item_Select' not implemented!")
+        #print("Event handler 'Item_Select' not implemented!")
+        self.dialog_Event = EventDialog(None, wx.ID_ANY, "")
+        #self.SetTopWindow(self.dialog_Event)
+        self.dialog_Event.ShowModal()
+        self.dialog_Event.Destroy()
+        return True
         event.Skip()
     def Col_Select(self, event):  # wxGlade: MainDialog.<event_handler>
         print("Event handler 'Col_Select' not implemented!")
         event.Skip()
     def Item_Focus(self, event):  # wxGlade: MainDialog.<event_handler>
-        print("Event handler 'Item_Focus' not implemented!")
+        #print("Event handler 'Item_Focus' not implemented!")
         event.Skip()
     def Item_Delete(self, event):  # wxGlade: MainDialog.<event_handler>
         print("Event handler 'Item_Delete' not implemented!")
@@ -153,6 +177,11 @@ class MainDialog(wx.Dialog):
         print("Event handler 'Item_Active' not implemented!")
         event.Skip()
     def Item_Edited(self, event):  # wxGlade: MainDialog.<event_handler>
-        print("Event handler 'Item_Edited' not implemented!")
+        #print("Event handler 'Item_Edited' not implemented!")
+        self.dialog_Event = ed.EventDialog(None, wx.ID_ANY, "")
+        #self.SetTopWindow(self.dialog_Event)
+        self.dialog_Event.ShowModal()
+        self.dialog_Event.Destroy()
+        return True
         event.Skip()
 # end of class MainDialog

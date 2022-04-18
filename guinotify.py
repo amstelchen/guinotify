@@ -16,8 +16,10 @@ class guinotifyApp(wx.App):
     def OnInit(self):
         self.dialog_Main = MainDialog(None, wx.ID_ANY, "")
         self.SetTopWindow(self.dialog_Main)
+        print("Loading configuration...")
         self.dialog_Main.ShowModal()
         self.dialog_Main.Destroy()
+        print("Saving configuration...")
         return True
 
 # end of class guinotifyApp
