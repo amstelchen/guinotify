@@ -17,7 +17,7 @@ class AboutDialog(wx.Dialog):
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_DIALOG_STYLE
         wx.Dialog.__init__(self, *args, **kwds)
         self.SetSize(wx.DLG_UNIT(self, wx.Size(150, 100)))
-        self.SetTitle(_("dialog_1"))
+        self.SetTitle(_("About"))
 
         sizer_1 = wx.BoxSizer(wx.VERTICAL)
 

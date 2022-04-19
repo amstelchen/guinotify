@@ -86,9 +86,9 @@ class MainDialog(wx.Dialog):
 
         self.lsNotifications = wx.ListCtrl(self.panel_1, wx.ID_ANY, style=wx.BORDER_DEFAULT | wx.FULL_REPAINT_ON_RESIZE | wx.LC_EDIT_LABELS | wx.LC_HRULES | wx.LC_REPORT | wx.LC_SINGLE_SEL | wx.LC_VRULES)
         self.lsNotifications.AppendColumn(_("File/Dir"), format=wx.LIST_FORMAT_LEFT, width=200)
-        self.lsNotifications.AppendColumn(_("Event"), format=wx.LIST_FORMAT_LEFT, width=150)
+        self.lsNotifications.AppendColumn(_("Events"), format=wx.LIST_FORMAT_LEFT, width=150)
         self.lsNotifications.AppendColumn(_("Options"), format=wx.LIST_FORMAT_LEFT, width=150)
-        self.lsNotifications.AppendColumn(_("DoWhat"), format=wx.LIST_FORMAT_LEFT, width=200)
+        self.lsNotifications.AppendColumn(_("Script"), format=wx.LIST_FORMAT_LEFT, width=200)
         self.lsNotifications.AppendColumn(_("Active"), format=wx.LIST_FORMAT_LEFT, width=50)
         item = wx.ListItem()
         item.SetText("/var/lib/boinc/job_log_milkyway.cs.rpi.edu_milkyway.txt")

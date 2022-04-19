@@ -17,7 +17,7 @@ class ScriptDialog(wx.Dialog):
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_DIALOG_STYLE
         wx.Dialog.__init__(self, *args, **kwds)
         self.SetSize(wx.DLG_UNIT(self, wx.Size(200, 200)))
-        self.SetTitle(_("dialog"))
+        self.SetTitle(_("Script"))
 
         sizer_1 = wx.BoxSizer(wx.VERTICAL)
 
