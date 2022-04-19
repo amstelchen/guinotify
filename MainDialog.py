@@ -8,9 +8,48 @@ import wx
 # end wxGlade
 
 # begin wxGlade: extracode
-import sys, os, configparser
+import sys, os
+from subprocess import PIPE, Popen, check_output
+import configparser
 import webbrowser
 from EventDialog import EventDialog
+from OptionDialog import OptionDialog
+
+def get_host_kernel_version():
+    """Get host's kernel version""" 
+    command = "uname -r"
+    process = Popen(args=command, stdout=PIPE, shell=True, universal_newlines=True)
+    result = process.communicate()[0].replace('\n','')
+    return result
+
+def get_inotif_tools_version():
+    """Get host's kernel version"""
+    command = "pacman -Q inotify-tools | cut -d ' ' -f 2"
+    process = Popen(args=command, stdout=PIPE, shell=True, universal_newlines=True)
+    result = process.communicate()[0].replace('\n','')
+    return result
+
+def get_wxwidgets_version():
+    """Get host's kernel version"""
+    command = "pacman -Q wxgtk3 | cut -d ' ' -f 2"
+    process = Popen(args=command, stdout=PIPE, shell=True, universal_newlines=True)
+    result = process.communicate()[0].replace('\n','')
+    return result
+
+def run_inotify_script(command):
+    """Get host's kernel version"""
+    #command = ""
+    process = Popen(args=command, stdout=PIPE, shell=True, universal_newlines=True)
+    result = process.communicate()[0].replace('\n','')
+    return result
+
+VERSION = "0.1.0"
+
+#VersionString = "Linux: 5.16.12-lqx1-1-lqx  inotify-tools: 3.22.1.0  guinotify: 1.0.1  wxWidgets: 3.0.5  wxPython: 4.1.1  Python: 3.10.4"
+#print (len(VersionString))
+VersionString = "Linux: " + os.uname()[2] + "  inotify-tools: " + get_inotif_tools_version() + "  guinotify: " + VERSION + \
+    "  wxWidgets: " + get_wxwidgets_version() + "  wxPython: " + wx.__version__ + "  Python: " + '.'.join([str(value) for value in sys.version_info[0:3]])
+#print (len(VersionString))
 # end wxGlade
 
 
@@ -20,7 +59,7 @@ class MainDialog(wx.Dialog):
         #print("")
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_DIALOG_STYLE
         wx.Dialog.__init__(self, *args, **kwds)
-        self.SetSize((730, 400))
+        self.SetSize((760, 400))
         self.SetTitle(_("guinotify"))
         _icon = wx.NullIcon
         _icon.CopyFromBitmap(wx.Bitmap("128x128.png", wx.BITMAP_TYPE_ANY))
@@ -40,13 +79,13 @@ class MainDialog(wx.Dialog):
 
         self.lsNotifications = wx.ListCtrl(self.panel_1, wx.ID_ANY, style=wx.BORDER_DEFAULT | wx.FULL_REPAINT_ON_RESIZE | wx.LC_EDIT_LABELS | wx.LC_HRULES | wx.LC_REPORT | wx.LC_SINGLE_SEL | wx.LC_VRULES)
         self.lsNotifications.AppendColumn(_("File/Dir"), format=wx.LIST_FORMAT_LEFT, width=200)
-        self.lsNotifications.AppendColumn(_("Event"), format=wx.LIST_FORMAT_LEFT, width=100)
+        self.lsNotifications.AppendColumn(_("Event"), format=wx.LIST_FORMAT_LEFT, width=150)
         self.lsNotifications.AppendColumn(_("Options"), format=wx.LIST_FORMAT_LEFT, width=150)
         self.lsNotifications.AppendColumn(_("DoWhat"), format=wx.LIST_FORMAT_LEFT, width=200)
         self.lsNotifications.AppendColumn(_("Active"), format=wx.LIST_FORMAT_LEFT, width=50)
         item = wx.ListItem()
         item.SetText("/var/lib/boinc/job_log_milkyway.cs.rpi.edu_milkyway.txt")
-        item.SetId(1)
+        item.SetId(0)
 
         self.lsNotifications.InsertItem(item)
         #self.lsNotifications.InsertItem(1, "/var/lib/boinc/job_log_milkyway.cs.rpi.edu_milkyway.txt")
@@ -57,12 +96,12 @@ class MainDialog(wx.Dialog):
         #self.lsNotifications.InsertItem(5, "watch5")
 
         self.lsNotifications.SetItem(0,1,"MODIFY", -1);
-        self.lsNotifications.SetItem(0,2,"no-dereference", -1);
-        self.lsNotifications.SetItem(0,3,"echo -e \\07 ; espeak-ng -vmb-de5 'Task fertig.' -s 175;", -1);
+        self.lsNotifications.SetItem(0,2,"--no-dereference", -1); # --monitor
+        self.lsNotifications.SetItem(0,3,"echo -e \\07 ; espeak-ng -vmb-de5 'Task fertig.' -s 175", -1);
         self.lsNotifications.SetItem(0,4,"Yes", -1);
         sizer_3.Add(self.lsNotifications, 1, wx.EXPAND, 0)
 
-        label_1 = wx.StaticText(self.panel_1, wx.ID_ANY, _("Linux: 5.16.12-lqx1-1-lqx  inotify-tools: 3.22.1.0  guinotify: 1.0.1  wxWidgets: 3.0.5  wxPython: 4.1.1  Python: 3.10.4"))
+        label_1 = wx.StaticText(self.panel_1, wx.ID_ANY, VersionString)
         sizer_3.Add(label_1, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.BOTTOM | wx.TOP, 5)
 
         sizer_2 = wx.StdDialogButtonSizer()
@@ -134,7 +173,12 @@ class MainDialog(wx.Dialog):
         print("Event handler 'btnOK_click' not implemented!")
         event.Skip()
     def btnEVENTS_click(self, event):  # wxGlade: MainDialog.<event_handler>                FÜR EVENTS
-        print("Event handler 'btnEVENTS_click' not implemented!")
+        #print("Event handler 'btnEVENTS_click' not implemented!")
+        self.dialog_Event = EventDialog(None, wx.ID_ANY, "")
+        #self.SetTopWindow(self.dialog_Event)
+        self.dialog_Event.ShowModal()
+        self.dialog_Event.Destroy()
+        return True
         event.Skip()
     def btnSCRIPT_click(self, event):  # wxGlade: MainDialog.<event_handler>                FÜR SCRIPT
         print("Event handler 'btnSCRIPT_click' not implemented!")
@@ -143,7 +187,12 @@ class MainDialog(wx.Dialog):
         print("Event handler 'btnCANCEL_click' not implemented!")
         event.Skip()
     def btnOPTIONS_click(self, event):  # wxGlade: MainDialog.<event_handler>               FÜR OPTIONS
-        print("Event handler 'btnOPTIONS_click' not implemented!")
+        #print("Event handler 'btnOPTIONS_click' not implemented!")
+        self.dialog_Option = OptionDialog(None, wx.ID_ANY, "")
+        #self.SetTopWindow(self.dialog_Event)
+        self.dialog_Option.ShowModal()
+        self.dialog_Option.Destroy()
+        return True
         event.Skip()
     def btnHELP_click(self, event):  # wxGlade: MainDialog.<event_handler>
         #print("Event handler 'btnHELP_click' not implemented!")
@@ -151,16 +200,28 @@ class MainDialog(wx.Dialog):
         webbrowser.open(url)
         event.Skip()
     def btnCLOSE_click(self, event):  # wxGlade: MainDialog.<event_handler>
-        print("Event handler 'btnCLOSE_click' not implemented!")
+        #print("Event handler 'btnCLOSE_click' not implemented!")
+        #self.lsNotifications.GetItem(self.lsNotifications.GetSelection())
+        selectedItem = self.lsNotifications.GetFirstSelected()
+        #print(selectedItem)
+        selectedCol_FileDir = self.lsNotifications.GetItem(selectedItem).Text
+        selectedCol_Event = self.lsNotifications.GetItem(selectedItem, 1).Text
+        selectedCol_Options = self.lsNotifications.GetItem(selectedItem, 2).Text
+        selectedCol_Script = self.lsNotifications.GetItem(selectedItem, 3).Text
+        #print(str(se.Text) + " " + str(se1.Text))
+        command = "while true; do " + "inotifywait -d -o /dev/null -e " + selectedCol_Event + " " + selectedCol_Options + " " + selectedCol_FileDir + " && " + selectedCol_Script + "; done"
+        print(command)
+        #run_inotify_script(command)
         event.Skip()
     def Item_Select(self, event):  # wxGlade: MainDialog.<event_handler>
         #print("Event handler 'Item_Select' not implemented!")
-        self.dialog_Event = EventDialog(None, wx.ID_ANY, "")
+        pass
+        #self.dialog_Event = EventDialog(None, wx.ID_ANY, "")
         #self.SetTopWindow(self.dialog_Event)
-        self.dialog_Event.ShowModal()
-        self.dialog_Event.Destroy()
-        return True
-        event.Skip()
+        #self.dialog_Event.ShowModal()
+        #self.dialog_Event.Destroy()
+        #return True
+        #event.Skip()
     def Col_Select(self, event):  # wxGlade: MainDialog.<event_handler>
         print("Event handler 'Col_Select' not implemented!")
         event.Skip()
@@ -177,11 +238,6 @@ class MainDialog(wx.Dialog):
         print("Event handler 'Item_Active' not implemented!")
         event.Skip()
     def Item_Edited(self, event):  # wxGlade: MainDialog.<event_handler>
-        #print("Event handler 'Item_Edited' not implemented!")
-        self.dialog_Event = ed.EventDialog(None, wx.ID_ANY, "")
-        #self.SetTopWindow(self.dialog_Event)
-        self.dialog_Event.ShowModal()
-        self.dialog_Event.Destroy()
-        return True
+        print("Event handler 'Item_Edited' not implemented!")
         event.Skip()
 # end of class MainDialog

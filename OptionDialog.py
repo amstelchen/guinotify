@@ -8,6 +8,28 @@ import wx
 # end wxGlade
 
 # begin wxGlade: extracode
+
+listOptions = {
+    "monitor" :         "Keep listening for events forever or until --timeout expires. ", # \
+                        #"Without this option, inotifywait will exit after one event is received.",
+    "daemon" :          "Same as --monitor, except run in the background " \
+                        "logging events to a file specified by --outfile.", # Implies --syslog.",
+    "no-dereference" :  "Do not follow symlinks.", 
+    "recursive" :       "Watch directories recursively.",
+    "fromfile <file>" : "Read files to watch from <file> or `-' for stdin.",
+    "outfile <file>" :  "Print events to <file> rather than stdout.",
+    "syslog" :          "Send errors to syslog rather than stderr.",
+    "quiet" :           "Print less (only print events).",
+    "qq" :              "Print nothing (not even events).",
+    "format <fmt>" :    "Print using a specified printf-like format " \
+                        "string; read the man page for more details.",
+    "no-newline" :      "Don't print newline symbol after --format string.",
+    "timefmt <fmt>" :   "strftime-compatible format string for use with %T in --format string.",
+    "csv" :             "Print events in CSV format.",
+    "timeout <seconds>" :"When listening for a single event, time out after " \
+                        "waiting for an event for <seconds> seconds. ", # \
+                        #"If <seconds> is zero, inotifywait will never time out."
+}
 # end wxGlade
 
 
@@ -16,8 +38,8 @@ class OptionDialog(wx.Dialog):
         # begin wxGlade: OptionDialog.__init__
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_DIALOG_STYLE
         wx.Dialog.__init__(self, *args, **kwds)
-        self.SetSize(wx.DLG_UNIT(self, wx.Size(150, 100)))
-        self.SetTitle(_("dialog"))
+        self.SetSize(wx.DLG_UNIT(self, wx.Size(440, 180)))
+        self.SetTitle(_("Options"))
 
         sizer_1 = wx.BoxSizer(wx.VERTICAL)
 
@@ -26,9 +48,14 @@ class OptionDialog(wx.Dialog):
 
         sizer_3 = wx.BoxSizer(wx.VERTICAL)
 
-        self.check_list_box_1 = wx.CheckListBox(self.panel_1, wx.ID_ANY, choices=[_("choice 1")])
-        self.check_list_box_1.SetMinSize(wx.DLG_UNIT(self.check_list_box_1, wx.Size(120, 80)))
-        sizer_3.Add(self.check_list_box_1, 0, wx.ALIGN_CENTER_HORIZONTAL, 0)
+        self.check_list_box_1 = wx.CheckListBox(self.panel_1, wx.ID_ANY) #, choices=[_("choice 1")])
+        self.check_list_box_1.SetMinSize(wx.DLG_UNIT(self.check_list_box_1, wx.Size(430, 140)))
+        
+        #font = wx.Font(100, wx.MODERN, wx.NORMAL, wx.NORMAL, False, u'')
+        #self.check_list_box_1.Font = font
+        
+        self.check_list_box_1.SetFont(wx.Font(9, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Monospace"))
+        sizer_3.Add(self.check_list_box_1, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, 10)
 
         sizer_2 = wx.StdDialogButtonSizer()
         sizer_1.Add(sizer_2, 0, wx.ALIGN_RIGHT | wx.ALL, 4)
@@ -50,6 +77,15 @@ class OptionDialog(wx.Dialog):
         self.SetEscapeId(self.button_CANCEL.GetId())
 
         self.Layout()
+
+        #num = 0
+        entries = []
+        for option, desc in listOptions.items():
+            #print(event)
+            #print(langs)
+            entries.append(str(option.ljust(18)) + ' ' + desc)
+            #entries.append(langs[0])
+        self.check_list_box_1.InsertItems(items=entries, pos=0)
         # end wxGlade
 
 # end of class OptionDialog

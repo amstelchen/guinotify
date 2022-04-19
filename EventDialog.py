@@ -34,8 +34,8 @@ class EventDialog(wx.Dialog):
         # begin wxGlade: EventDialog.__init__
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_DIALOG_STYLE
         wx.Dialog.__init__(self, *args, **kwds)
-        self.SetSize(wx.DLG_UNIT(self, wx.Size(260, 200)))
-        self.SetTitle(_("dialog"))
+        self.SetSize(wx.DLG_UNIT(self, wx.Size(305, 190)))
+        self.SetTitle(_("Events"))
 
         sizer_1 = wx.BoxSizer(wx.VERTICAL)
 
@@ -45,8 +45,10 @@ class EventDialog(wx.Dialog):
         sizer_3 = wx.BoxSizer(wx.VERTICAL)
 
         self.check_list_box_1 = wx.CheckListBox(self.panel_1, wx.ID_ANY) #, choices=[_("choice 1")])
-        self.check_list_box_1.SetMinSize(wx.DLG_UNIT(self.check_list_box_1, wx.Size(250, 160)))
-        sizer_3.Add(self.check_list_box_1, 0, wx.ALIGN_CENTER_HORIZONTAL, 0)
+        self.check_list_box_1.SetMinSize(wx.DLG_UNIT(self.check_list_box_1, wx.Size(295, 150)))
+
+        self.check_list_box_1.SetFont(wx.Font(9, wx.DEFAULT, wx.NORMAL, wx.NORMAL, 0, "Monospace"))
+        sizer_3.Add(self.check_list_box_1, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, 10)
 
         sizer_2 = wx.StdDialogButtonSizer()
         sizer_1.Add(sizer_2, 0, wx.ALIGN_RIGHT | wx.ALL, 4)
@@ -69,12 +71,12 @@ class EventDialog(wx.Dialog):
 
         self.Layout()
 
-        num = 0
+        #num = 0
         entries = []
         for event, langs in listEvents.items():
             #print(event)
             #print(langs)
-            entries.append(str(event) + ' ' + langs[0])
+            entries.append(str(event.ljust(14)) + ' ' + langs[0])
             #entries.append(langs[0])
         self.check_list_box_1.InsertItems(items=entries, pos=0)
         # end wxGlade
