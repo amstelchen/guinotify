@@ -14,6 +14,7 @@ import configparser
 import webbrowser
 from EventDialog import EventDialog
 from OptionDialog import OptionDialog
+from ScriptDialog import ScriptDialog
 
 def get_host_kernel_version():
     """Get host's kernel version""" 
@@ -95,10 +96,12 @@ class MainDialog(wx.Dialog):
         #self.lsNotifications.InsertItem(4, "watch4")
         #self.lsNotifications.InsertItem(5, "watch5")
 
+        # TESTDATEN
         self.lsNotifications.SetItem(0,1,"MODIFY", -1);
         self.lsNotifications.SetItem(0,2,"--no-dereference", -1); # --monitor
         self.lsNotifications.SetItem(0,3,"echo -e \\07 ; espeak-ng -vmb-de5 'Task fertig.' -s 175", -1);
         self.lsNotifications.SetItem(0,4,"Yes", -1);
+        
         sizer_3.Add(self.lsNotifications, 1, wx.EXPAND, 0)
 
         label_1 = wx.StaticText(self.panel_1, wx.ID_ANY, VersionString)
@@ -172,47 +175,66 @@ class MainDialog(wx.Dialog):
     def btnOK_click(self, event):  # wxGlade: MainDialog.<event_handler>
         print("Event handler 'btnOK_click' not implemented!")
         event.Skip()
+
     def btnEVENTS_click(self, event):  # wxGlade: MainDialog.<event_handler>                FÜR EVENTS
-        #print("Event handler 'btnEVENTS_click' not implemented!")
-        self.dialog_Event = EventDialog(None, wx.ID_ANY, "")
-        #self.SetTopWindow(self.dialog_Event)
-        self.dialog_Event.ShowModal()
-        self.dialog_Event.Destroy()
-        return True
+        selectedItem = self.lsNotifications.GetFirstSelected()
+        if selectedItem >= 0:
+            #print("Event handler 'btnEVENTS_click' not implemented!")
+            self.dialog_Event = EventDialog(None, wx.ID_ANY, "")
+            #self.SetTopWindow(self.dialog_Event)
+            self.dialog_Event.ShowModal()
+            self.dialog_Event.Destroy()
+            return True
         event.Skip()
+
     def btnSCRIPT_click(self, event):  # wxGlade: MainDialog.<event_handler>                FÜR SCRIPT
-        print("Event handler 'btnSCRIPT_click' not implemented!")
+        selectedItem = self.lsNotifications.GetFirstSelected()
+        if selectedItem >= 0:
+            #print("Event handler 'btnSCRIPT_click' not implemented!")
+            self.dialog_Script = ScriptDialog(None, wx.ID_ANY, "")
+            #self.SetTopWindow(self.dialog_Script)
+            self.dialog_Script.ShowModal()
+            self.dialog_Script.Destroy()
+            return True
         event.Skip()
+
+    def btnOPTIONS_click(self, event):  # wxGlade: MainDialog.<event_handler>               FÜR OPTIONS
+        selectedItem = self.lsNotifications.GetFirstSelected()
+        if selectedItem >= 0:
+            #print("Event handler 'btnOPTIONS_click' not implemented!")
+            self.dialog_Option = OptionDialog(None, wx.ID_ANY, "")
+            #self.SetTopWindow(self.dialog_Event)
+            self.dialog_Option.ShowModal()
+            self.dialog_Option.Destroy()
+            return True
+        event.Skip()
+
     def btnCANCEL_click(self, event):  # wxGlade: MainDialog.<event_handler>
         print("Event handler 'btnCANCEL_click' not implemented!")
         event.Skip()
-    def btnOPTIONS_click(self, event):  # wxGlade: MainDialog.<event_handler>               FÜR OPTIONS
-        #print("Event handler 'btnOPTIONS_click' not implemented!")
-        self.dialog_Option = OptionDialog(None, wx.ID_ANY, "")
-        #self.SetTopWindow(self.dialog_Event)
-        self.dialog_Option.ShowModal()
-        self.dialog_Option.Destroy()
-        return True
-        event.Skip()
+
     def btnHELP_click(self, event):  # wxGlade: MainDialog.<event_handler>
         #print("Event handler 'btnHELP_click' not implemented!")
         url = 'https://github.com/amstelchen/guinotify'
         webbrowser.open(url)
         event.Skip()
+
     def btnCLOSE_click(self, event):  # wxGlade: MainDialog.<event_handler>
         #print("Event handler 'btnCLOSE_click' not implemented!")
         #self.lsNotifications.GetItem(self.lsNotifications.GetSelection())
         selectedItem = self.lsNotifications.GetFirstSelected()
-        #print(selectedItem)
-        selectedCol_FileDir = self.lsNotifications.GetItem(selectedItem).Text
-        selectedCol_Event = self.lsNotifications.GetItem(selectedItem, 1).Text
-        selectedCol_Options = self.lsNotifications.GetItem(selectedItem, 2).Text
-        selectedCol_Script = self.lsNotifications.GetItem(selectedItem, 3).Text
-        #print(str(se.Text) + " " + str(se1.Text))
-        command = "while true; do " + "inotifywait -d -o /dev/null -e " + selectedCol_Event + " " + selectedCol_Options + " " + selectedCol_FileDir + " && " + selectedCol_Script + "; done"
-        print(command)
-        #run_inotify_script(command)
+        if selectedItem > 0:
+            #print(selectedItem)
+            selectedCol_FileDir = self.lsNotifications.GetItem(selectedItem).Text
+            selectedCol_Event = self.lsNotifications.GetItem(selectedItem, 1).Text
+            selectedCol_Options = self.lsNotifications.GetItem(selectedItem, 2).Text
+            selectedCol_Script = self.lsNotifications.GetItem(selectedItem, 3).Text
+            #print(str(se.Text) + " " + str(se1.Text))
+            command = "while true; do " + "inotifywait -d -o /dev/null -e " + selectedCol_Event + " " + selectedCol_Options + " " + selectedCol_FileDir + " && " + selectedCol_Script + "; done"
+            print(command)
+            #run_inotify_script(command)
         event.Skip()
+
     def Item_Select(self, event):  # wxGlade: MainDialog.<event_handler>
         #print("Event handler 'Item_Select' not implemented!")
         pass
@@ -222,21 +244,27 @@ class MainDialog(wx.Dialog):
         #self.dialog_Event.Destroy()
         #return True
         #event.Skip()
+
     def Col_Select(self, event):  # wxGlade: MainDialog.<event_handler>
         print("Event handler 'Col_Select' not implemented!")
         event.Skip()
+
     def Item_Focus(self, event):  # wxGlade: MainDialog.<event_handler>
         #print("Event handler 'Item_Focus' not implemented!")
         event.Skip()
+
     def Item_Delete(self, event):  # wxGlade: MainDialog.<event_handler>
         print("Event handler 'Item_Delete' not implemented!")
         event.Skip()
+
     def Item_Insert(self, event):  # wxGlade: MainDialog.<event_handler>
         print("Event handler 'Item_Insert' not implemented!")
         event.Skip()
+
     def Item_Active(self, event):  # wxGlade: MainDialog.<event_handler>
         print("Event handler 'Item_Active' not implemented!")
         event.Skip()
+
     def Item_Edited(self, event):  # wxGlade: MainDialog.<event_handler>
         print("Event handler 'Item_Edited' not implemented!")
         event.Skip()
