@@ -24,4 +24,8 @@ package() {
 
   install -Dm755 "${srcdir}/${_pkgname}-${pkgver}"/guinotify.py \
       "${pkgdir}"/usr/bin/guinotify
+  install -Dm755 "${srcdir}/${_pkgname}-${pkgver}"/guinotify.desktop \
+      "${pkgdir}"/usr/share/applications
+  install -Dm755 "${srcdir}/${_pkgname}-${pkgver}"/guinotify.png \
+      "${pkgdir}"/usr/share/pixmaps/
 }

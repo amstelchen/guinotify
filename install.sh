@@ -2,7 +2,7 @@
 
 # FOR TESTING PURPOSES ONLY !!!
 
-sudo cp -v 128x128.png /usr/share/pixmaps/guinotify.png
+sudo cp -v guinotify.png /usr/share/pixmaps/
 sudo cp -v guinotify.desktop /usr/share/applications/
 cp -v guinotify.desktop ~/Desktop/guinotify.desktop
 

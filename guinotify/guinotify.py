@@ -9,7 +9,7 @@
 
 import wx
 import gettext
-from MainDialog import MainDialog
+from .MainDialog import MainDialog
 
 
 class guinotifyApp(wx.App):
@@ -23,9 +23,3 @@ class guinotifyApp(wx.App):
         return True
 
 # end of class guinotifyApp
-
-if __name__ == "__main__":
-    gettext.install("guinotify") # replace with the appropriate catalog name
-
-    guinotify = guinotifyApp(0)
-    guinotify.MainLoop()

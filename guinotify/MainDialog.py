@@ -12,9 +12,9 @@ import sys, os
 from subprocess import PIPE, Popen, check_output
 import configparser
 import webbrowser
-from EventDialog import EventDialog
-from OptionDialog import OptionDialog
-from ScriptDialog import ScriptDialog
+from .EventDialog import EventDialog
+from .OptionDialog import OptionDialog
+from .ScriptDialog import ScriptDialog
 
 def get_host_kernel_version():
     """Get host's kernel version""" 
@@ -57,19 +57,25 @@ VersionString = "Linux: " + os.uname()[2] + "  inotify-tools: " + get_inotif_too
 class MainDialog(wx.Dialog):
     def __init__(self, *args, **kwds):
         # begin wxGlade: MainDialog.__init__
-        #print("")
+
+        script_dir = os.path.dirname(__file__) #<-- absolute dir the script is in
+        rel_path = "images/"
+        abs_file_path = os.path.join(script_dir, rel_path)
+        #print(abs_file_path)
+
         kwds["style"] = kwds.get("style", 0) | wx.DEFAULT_DIALOG_STYLE
         wx.Dialog.__init__(self, *args, **kwds)
         self.SetSize((760, 400))
         self.SetTitle(_("guinotify"))
+
         _icon = wx.NullIcon
-        _icon.CopyFromBitmap(wx.Bitmap("128x128.png", wx.BITMAP_TYPE_ANY))
-        #/home/mic/Projekte/guinotify/128x128.png
+        _icon.CopyFromBitmap(wx.Bitmap(abs_file_path + "guinotify.png", wx.BITMAP_TYPE_ANY))
+        # was /home/mic/Projekte/guinotify/128x128.png
         self.SetIcon(_icon)
 
-        bmp_events = wx.Bitmap("images/events-16x16.png")
-        bmp_options = wx.Bitmap("images/options-16x16.png")
-        bmp_script = wx.Bitmap("images/script-16x16.png")
+        bmp_events = wx.Bitmap(abs_file_path + "events-16x16.png")
+        bmp_options = wx.Bitmap(abs_file_path + "options-16x16.png")
+        bmp_script = wx.Bitmap(abs_file_path + "script-16x16.png")
 
         sizer_1 = wx.BoxSizer(wx.VERTICAL)
 
