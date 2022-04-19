@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-18 18:08+0200\n"
+"POT-Creation-Date: 2022-04-19 23:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,48 +17,42 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: AboutDialog.py:20
+#: guinotify/AboutDialog.py:20
 msgid "dialog_1"
 msgstr ""
 
-#: AboutDialog.py:31 MainDialog.py:22
+#: guinotify/AboutDialog.py:31 guinotify/MainDialog.py:69
 msgid "guinotify"
 msgstr ""
 
-#: AboutDialog.py:35
+#: guinotify/AboutDialog.py:35
 msgid "A tiny frontend for inotify"
 msgstr ""
 
-#: EventDialog.py:20 OptionDialog.py:20
-msgid "dialog"
+#: guinotify/EventDialog.py:38
+msgid "Events"
 msgstr ""
 
-#: EventDialog.py:29 OptionDialog.py:29
-msgid "choice 1"
-msgstr ""
-
-#: MainDialog.py:35
+#: guinotify/MainDialog.py:88
 msgid "File/Dir"
 msgstr ""
 
-#: MainDialog.py:36
+#: guinotify/MainDialog.py:89
 msgid "Event"
 msgstr ""
 
-#: MainDialog.py:37
+#: guinotify/MainDialog.py:90 guinotify/OptionDialog.py:42
 msgid "Options"
 msgstr ""
 
-#: MainDialog.py:38
+#: guinotify/MainDialog.py:91
 msgid "DoWhat"
 msgstr ""
 
-#: MainDialog.py:39
+#: guinotify/MainDialog.py:92
 msgid "Active"
 msgstr ""
 
-#: MainDialog.py:58
-msgid ""
-"Linux: 5.16.12-lqx1-1-lqx  inotify-tools: 3.22.1.0  guinotify: 1.0.1  "
-"wxWidgets: 3.0.5  wxPython: 4.1.1  Python: 3.10.4"
+#: guinotify/ScriptDialog.py:20
+msgid "dialog"
 msgstr ""
