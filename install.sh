@@ -16,6 +16,7 @@ sudo cp guinotify/locales/de/LC_MESSAGES/guinotify.mo /usr/share/locale/de/LC_ME
 #makepkg -fci
 
 #install -Dm755 guinotify.py /usr/bin/guinotify
+sudo cp ~/.local/bin/poetry /usr/bin/guinotify
 
 #xdg-open ~/Desktop/GameInfo.desktop
 python -m guinotify
